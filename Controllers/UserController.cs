@@ -39,7 +39,7 @@ public class UserController: ControllerBase
     }
 
     [HttpPut("{id}")]
-    public void Update(string id, User user){
+    public IActionResult Update(string id, User user){
 
         Guid idUser = Guid.Parse(id);
 
@@ -54,10 +54,11 @@ public class UserController: ControllerBase
             _context.SaveChanges(); 
         }
 
-        // return NoContent(); 
+        return NoContent();
     }
+
     [HttpDelete("{id}")]
-    public void Delete(string id){
+    public IActionResult Delete(string id){
 
         Guid idUser = Guid.Parse(id); 
 
@@ -68,7 +69,7 @@ public class UserController: ControllerBase
             _context.Users.Remove(userDelete); 
             _context.SaveChanges(); 
         }
-        // return Ok(); 
+        return Ok(); 
     }
 }
 
