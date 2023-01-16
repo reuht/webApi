@@ -12,7 +12,7 @@ public class Movie
     public string Actors { get; set; }
     public float Qualification { get; set;}
     public int units { get; set; }
-    public ICollection<MovieGender> MovieGenders {get; set;}
-    public ICollection<UserMovie> UserMovies {get; set;}
+    public List<MovieGender> MovieGenders {get; set;}
+    public List<UserMovie> UserMovies {get; set;}
 
 }

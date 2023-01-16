@@ -16,10 +16,11 @@ public partial class AplicationContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        modelBuilder.Entity<User>(user =>
+        modelBuilder.Entity<User>(user => //cuidado!!
         {
           user.ToTable("User");
           user.HasKey(p => p.UserId);
+          user.Property(p => p.UserId).ValueGeneratedOnAdd();
           user.Property(p => p.Name).HasMaxLength(150).IsRequired();
           user.Property(p => p.Email).IsRequired();
           user.Property(p => p.Identification).IsRequired();
