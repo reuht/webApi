@@ -1,5 +1,7 @@
+// using System.ComponentModel.DataAnnotations.Schema;
+// using System.Text.Json.Serialization;
+
 namespace Models;
-using System.Text.Json.Serialization;
 public class User
 {   
     public Guid UserId { get; set; }
@@ -9,8 +11,7 @@ public class User
     public Rol Roluser {get;set;}
     public string Identification { get; set; } = null!;
     public string Adress { get; set; } = null!;
-    [JsonIgnore]
-    public List<UserMovie> UserMovies {get; set;}
+    public virtual List<UserMovie>? UserMovies {get; set;}
     
 }
 

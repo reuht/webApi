@@ -1,7 +1,5 @@
-using System.Reflection.Emit;
-using System.Reflection.Metadata.Ecma335;
-using System.Dynamic;
 
+using System;
 using Models;
 using ContextAplication; 
 using Microsoft.AspNetCore.Mvc; 
@@ -37,7 +35,7 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
-    public  IActionResult Create(User user){
+    public IActionResult Create(User user){
          _context.Users.Add(user);
          _context.SaveChanges(); 
         return CreatedAtAction(nameof(GetById), new {id = user.UserId}, user);  

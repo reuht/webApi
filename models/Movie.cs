@@ -12,7 +12,7 @@ public class Movie
     public string Actors { get; set; }
     public float Qualification { get; set;}
     public int units { get; set; }
-    public List<MovieGender> MovieGenders {get; set;}
-    public List<UserMovie> UserMovies {get; set;}
+    public virtual List<MovieGender>? MovieGenders {get; set;}
+    public virtual List<UserMovie>? UserMovies {get; set;}
 
 }
