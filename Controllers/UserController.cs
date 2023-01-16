@@ -39,34 +39,36 @@ public class UserController: ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(string id, User user){
+    public void Update(string id, User user){
 
         Guid idUser = Guid.Parse(id);
 
         var userUpdate = _context.Users.Find(idUser); 
 
-        userUpdate.Name = user.Name; 
-        userUpdate.Email = user.Email;
-        userUpdate.Identification = user.Identification;
-        userUpdate.Pass = user.Pass; 
-        userUpdate.Adress = user.Adress;
-        _context.SaveChanges(); 
+        if(userUpdate is not null) {
+            userUpdate.Name = user.Name; 
+            userUpdate.Email = user.Email;
+            userUpdate.Identification = user.Identification;
+            userUpdate.Pass = user.Pass; 
+            userUpdate.Adress = user.Adress;
+            _context.SaveChanges(); 
+        }
 
-        return NoContent(); 
+        // return NoContent(); 
     }
     [HttpDelete("{id}")]
-    public IActionResult Delete(string id){
+    public void Delete(string id){
 
         Guid idUser = Guid.Parse(id); 
 
         var userDelete = _context.Users.Find(idUser); 
 
-        if(userDelete is null) return BadRequest(); 
-
-        _context.Users.Remove(userDelete); 
-        _context.SaveChanges(); 
-
-        return Ok(); 
+        if(userDelete is not null) 
+        {
+            _context.Users.Remove(userDelete); 
+            _context.SaveChanges(); 
+        }
+        // return Ok(); 
     }
 }
 
