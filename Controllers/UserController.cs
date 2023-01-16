@@ -1,5 +1,3 @@
-
-using System;
 using Models;
 using ContextAplication; 
 using Microsoft.AspNetCore.Mvc; 
@@ -29,7 +27,6 @@ public class UserController: ControllerBase
         var user = _context.Users.Find(id);
 
         if(user is null) return NotFound();
-
         return user; 
 
     }
@@ -40,9 +37,43 @@ public class UserController: ControllerBase
          _context.SaveChanges(); 
         return CreatedAtAction(nameof(GetById), new {id = user.UserId}, user);  
     }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(string id, User user){
+
+        Guid idUser = Guid.Parse(id);
+
+        var userUpdate = _context.Users.Find(idUser); 
+
+        userUpdate.Name = user.Name; 
+        userUpdate.Email = user.Email;
+        userUpdate.Identification = user.Identification;
+        userUpdate.Pass = user.Pass; 
+        userUpdate.Adress = user.Adress;
+        _context.SaveChanges(); 
+
+        return NoContent(); 
+    }
+    [HttpDelete("{id}")]
+    public IActionResult Delete(string id){
+
+        Guid idUser = Guid.Parse(id); 
+
+        var userDelete = _context.Users.Find(idUser); 
+
+        if(userDelete is null) return BadRequest(); 
+
+        _context.Users.Remove(userDelete); 
+        _context.SaveChanges(); 
+
+        return Ok(); 
+    }
 }
 
 
 // GET 
 // GET BY ID
+// POST 
+// PUT 
+// DELETE
 // UserController --> /user <----Ruta 

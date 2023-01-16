@@ -26,8 +26,6 @@ public partial class AplicationContext : DbContext
           user.Property(p => p.Identification).IsRequired();
           user.Property(p => p.Pass).IsRequired();
           user.Property(p => p.Adress).IsRequired();
-        //   user.Property(p => p.UserMovies).IsRequired(false);
-        
         });
 
         modelBuilder.Entity<Movie>(movie =>{
