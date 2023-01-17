@@ -6,7 +6,7 @@ namespace backEnd.Controller;
 
 
 [ApiController] // atributos
-[Route("/users")]
+[Route("[controller]")]
 public class UserController: ControllerBase 
 {
     private readonly UserServices _services; //inyeccion dependencias --> permite entrar en el context

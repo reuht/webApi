@@ -13,30 +13,30 @@ public class UserServices
         _context = context; 
     }
 
-    [HttpGet] //atributo ---> tipo de peticion --> ruta: /
+    
     public IEnumerable<User>Get(){
         
         return _context.Users.ToList(); 
 
     } //=> _context.Users.ToList();
 
-    [HttpGet("{id}")] //atributo ---> tipo de peticion /:id
+   
     public User? GetById(string id){
 
         Guid idUser = Guid.Parse(id); 
         var user = _context.Users.Find(idUser);
-
+        
         return user; 
     }
 
-    [HttpPost]
+
     public User Create(User user){
          _context.Users.Add(user);
          _context.SaveChanges(); 
         return user;  
     }
 
-    [HttpPut("{id}")]
+
     public void Update(string id, User user){
 
         Guid idUser = Guid.Parse(id);
@@ -53,7 +53,7 @@ public class UserServices
         }
     }
 
-    [HttpDelete("{id}")]
+  
     public void Delete(string id){
 
         Guid idUser = Guid.Parse(id); 
