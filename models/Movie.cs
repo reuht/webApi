@@ -12,10 +12,8 @@ public class Movie
     public string Director { get; set; }
     public string Actors { get; set; }
     public float Qualification { get; set;}
-    [NotMappedAttribute]
-    public virtual string Genders {get; set;}
-    public virtual List<MovieGender>? MovieGenders {get; set;}
-    public virtual List<UserMovie>? UserMovies {get; set;}
+    public IEnumerable<MovieGender>? MovieGenders {get; set;}
+    public IEnumerable<UserMovie>? UserMovies {get; set;}
 
 }
 

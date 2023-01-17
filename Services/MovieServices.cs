@@ -1,6 +1,6 @@
 using Models;
 using ContextAplication;
-
+// using System.Data.Entity; 
 namespace backEnd.Services; 
 
 public class MovieServices 
@@ -13,7 +13,7 @@ public class MovieServices
 
     public IEnumerable<Movie> Get(){
 
-        return _context.Movies.ToList(); 
+        return _context.Movies; 
     }
 
     public Movie? GetById(string id) {
@@ -25,7 +25,8 @@ public class MovieServices
     }
 
     public Movie Create(Movie movie) {
-        _context.Movies.Add(movie); 
+        
+        _context.Movies.Add(movie);
         _context.SaveChanges();
         return movie; 
     }

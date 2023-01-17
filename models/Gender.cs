@@ -4,5 +4,5 @@ public class Gender
 {
     public Guid GenderId { get; set; }
     public string NameGender { get; set; } = null!; //no null 
-     public ICollection<MovieGender>? MovieGenders {get; set;} 
+     public IEnumerable<MovieGender>? MovieGenders {get; set;} 
 }

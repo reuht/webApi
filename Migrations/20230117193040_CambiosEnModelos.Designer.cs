@@ -3,6 +3,7 @@ using System;
 using ContextAplication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backEnd.Migrations
 {
     [DbContext(typeof(AplicationContext))]
-    partial class AplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230117193040_CambiosEnModelos")]
+    partial class CambiosEnModelos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,17 +80,25 @@ namespace backEnd.Migrations
 
             modelBuilder.Entity("Models.MovieGender", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<Guid>("GenderId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("MovieId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("GenderId", "MovieId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("GenderId");
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("MovieGenders");
+                    b.ToTable("MovieGender", (string)null);
                 });
 
             modelBuilder.Entity("Models.User", b =>
@@ -127,11 +138,11 @@ namespace backEnd.Migrations
 
             modelBuilder.Entity("Models.UserMovie", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Booking")
                         .HasColumnType("timestamp with time zone");
@@ -142,11 +153,19 @@ namespace backEnd.Migrations
                     b.Property<DateTime>("Delivery")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("UserId", "MovieId");
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("UserMovies");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserMovie", (string)null);
                 });
 
             modelBuilder.Entity("Models.MovieGender", b =>

@@ -2,7 +2,7 @@ namespace Models;
 
 public class UserMovie 
 {   
-    public int Id {get; set;}
+   
     public Guid UserId {get; set;}
     public Guid MovieId {get; set;}
     public DateTime Booking {get; set;}

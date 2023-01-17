@@ -38,39 +38,30 @@ public partial class AplicationContext : DbContext
             gender.HasKey(p => p.GenderId);
         });
 
-        modelBuilder.Entity<UserMovie>(userMovie => {
-            userMovie.ToTable("UserMovie");
-            userMovie.Property(p => p.Id)
-            .ValueGeneratedOnAdd(); 
-        });
-
-        modelBuilder.Entity<MovieGender>(movieGender =>{
-            movieGender.ToTable("MovieGender");
-            movieGender.Property(p => p.Id)
-            .ValueGeneratedOnAdd();
-        });
-
+   
            //--------------------Relations--MovieGender
+        modelBuilder.Entity<MovieGender>().HasKey(t => new {t.GenderId,t.MovieId});
         modelBuilder.Entity<MovieGender>()
-            .HasOne(a => a.Movie)
-            .WithMany(b => b.MovieGenders)
-            .HasForeignKey(c => c.MovieId);
+            .HasOne(pt => pt.Movie)
+            .WithMany(p => p.MovieGenders)
+            .HasForeignKey(pt => pt.MovieId);
             
         modelBuilder.Entity<MovieGender>()
-            .HasOne(a => a.Gender)
-            .WithMany(b => b.MovieGenders)
-            .HasForeignKey(c => c.GenderId);
+            .HasOne(pt => pt.Gender)
+            .WithMany(p => p.MovieGenders)
+            .HasForeignKey(pt => pt.GenderId);
 
         //-------------------- Relations--UserMovie
+        modelBuilder.Entity<UserMovie>().HasKey(t => new {t.UserId,t.MovieId});
         modelBuilder.Entity<UserMovie>()
-            .HasOne(a => a.User)
-            .WithMany(b => b.UserMovies)
-            .HasForeignKey(c => c.UserId);
+            .HasOne(pt => pt.User)
+            .WithMany(p => p.UserMovies)
+            .HasForeignKey(pt => pt.UserId);
         
         modelBuilder.Entity<UserMovie>()
-            .HasOne(a => a.Movie)
-            .WithMany(b => b.UserMovies)
-            .HasForeignKey(c => c.MovieId);
+            .HasOne(pt => pt.Movie)
+            .WithMany(p => p.UserMovies)
+            .HasForeignKey(pt => pt.MovieId);
         //-----------------------------------------
 
     }
