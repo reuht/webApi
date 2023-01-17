@@ -21,9 +21,10 @@ public class UserServices
     } //=> _context.Users.ToList();
 
     [HttpGet("{id}")] //atributo ---> tipo de peticion /:id
-    public User? GetById(int id){
+    public User? GetById(string id){
 
-        var user = _context.Users.Find(id);
+        Guid idUser = Guid.Parse(id); 
+        var user = _context.Users.Find(idUser);
 
         return user; 
     }

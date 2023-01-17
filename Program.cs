@@ -1,6 +1,7 @@
 
 using ContextAplication;
-using 
+using backEnd.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,9 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNpgsql<AplicationContext>(builder.Configuration.GetConnectionString("postgreConnection"));
+
 //Services 
-builder.Services.AddScoped<UserServices>(); 
+builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<MovieServices>();
 //Services
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
