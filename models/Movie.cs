@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 namespace Models;
 
 public class Movie
@@ -12,7 +13,9 @@ public class Movie
     public string Director { get; set; }
     public string Actors { get; set; }
     public float Qualification { get; set;}
+    [JsonIgnore]
     public IEnumerable<MovieGender>? MovieGenders {get; set;}
+    [JsonIgnore]
     public IEnumerable<UserMovie>? UserMovies {get; set;}
 
 }

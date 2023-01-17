@@ -26,8 +26,15 @@ public class MovieServices
 
     public Movie Create(Movie movie) {
         
+        
         _context.Movies.Add(movie);
         _context.SaveChanges();
+
+        // var movieCreated = _context.Movies.Find(movie.MovieId); 
+
+        _context.MovieGenders.Add(new MovieGender() {MovieId = movie.MovieId, GenderId = new Guid("77fec454-44ed-4d8e-99a9-a7f4b3682c59") }); 
+        _context.SaveChanges(); 
+
         return movie; 
     }
 
