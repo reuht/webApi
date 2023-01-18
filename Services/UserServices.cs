@@ -4,50 +4,58 @@ using backEnd.DTOs;
 using ContextAplication;
 using Microsoft.EntityFrameworkCore;
 
-namespace backEnd.Services; 
+namespace backEnd.Services;
 
-public class UserServices 
+public class UserServices
 {
-    private readonly AplicationContext _context; 
+    private readonly AplicationContext _context;
     public UserServices(AplicationContext context)
     {
-        _context = context; 
+        _context = context;
     }
 
-    
-    public async Task<IEnumerable<User>>Get()
+
+    public async Task<IEnumerable<User>> Get()
     {
-        
-        return await _context.Users.ToListAsync(); 
+
+        return await _context.Users.ToListAsync();
 
     } //=> _context.Users.ToList();
 
-   
+
     public async Task<User>? GetById(string id)
     {
 
-        Guid idUser = Guid.Parse(id); 
+        Guid idUser = Guid.Parse(id);
         var user = await _context.Users.FindAsync(idUser);
-        
-        return user; 
+
+        return user;
     }
 
 
     public async Task<User> Create(UserDTO user)
     {
-         var newUser = new User(); 
-         Rol value = (Rol)((int)(user.Roluser)); 
+        try
+        {
 
-         newUser.Name = user.Name; 
-         newUser.Email = user.Email;
-         newUser.Pass = user.Pass;
-         newUser.Identification = user.Identification;
-         newUser.Adress = user.Adress;
-         newUser.Roluser = value; 
+            var newUser = new User();
+            Rol value = (Rol)((int)(user.Roluser));
 
-         await _context.Users.AddAsync(newUser);
-         await _context.SaveChangesAsync(); 
-        return newUser;  
+            newUser.Name = user.Name;
+            newUser.Email = user.Email;
+            newUser.Pass = user.Pass;
+            newUser.Identification = user.Identification;
+            newUser.Adress = user.Adress;
+            newUser.Roluser = value;
+
+            await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+            return newUser;
+        }
+        catch (Exception ex)
+        {
+            return null; 
+        }
     }
 
 
@@ -56,32 +64,32 @@ public class UserServices
 
         Guid idUser = Guid.Parse(id);
 
-        var userUpdate = await _context.Users.FindAsync(idUser); 
+        var userUpdate = await _context.Users.FindAsync(idUser);
 
-        if(userUpdate is not null) 
+        if (userUpdate is not null)
         {
-            userUpdate.Name = user.Name; 
+            userUpdate.Name = user.Name;
             userUpdate.Email = user.Email;
             userUpdate.Identification = user.Identification;
-            userUpdate.Pass = user.Pass; 
+            userUpdate.Pass = user.Pass;
             userUpdate.Adress = user.Adress;
-            
-            await _context.SaveChangesAsync(); 
+
+            await _context.SaveChangesAsync();
         }
     }
 
-  
+
     public async Task Delete(string id)
     {
 
-        Guid idUser = Guid.Parse(id); 
+        Guid idUser = Guid.Parse(id);
 
-        var userDelete = _context.Users.Find(idUser); 
+        var userDelete = _context.Users.Find(idUser);
 
-        if(userDelete is not null) 
+        if (userDelete is not null)
         {
-            _context.Users.Remove(userDelete); 
-            await _context.SaveChangesAsync(); 
+            _context.Users.Remove(userDelete);
+            await _context.SaveChangesAsync();
         }
     }
 }

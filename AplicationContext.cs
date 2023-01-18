@@ -14,7 +14,7 @@ public partial class AplicationContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
+        
         modelBuilder.Entity<User>(user => //cuidado!!
         {
           user.ToTable("User");
@@ -26,6 +26,8 @@ public partial class AplicationContext : DbContext
           user.Property(p => p.Pass).IsRequired();
           user.Property(p => p.Adress).IsRequired();
         });
+
+        modelBuilder.Entity<User>().HasIndex(p => p.Email).IsUnique();
 
         modelBuilder.Entity<Movie>(movie =>{
             movie.ToTable("Movie");

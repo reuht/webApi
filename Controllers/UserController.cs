@@ -37,7 +37,12 @@ public class UserController: ControllerBase
 
         var newUser = await _services.Create(user); 
 
-        return CreatedAtAction(nameof(GetById), new {id = newUser.UserId}, newUser); 
+        if(newUser is not null){
+            return CreatedAtAction(nameof(GetById), new {id = newUser.UserId}, newUser); 
+        }
+
+        return BadRequest(); 
+
     }
 
     [HttpPut("{id}")]
