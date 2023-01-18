@@ -1,24 +1,20 @@
-using System.Text.Json.Serialization;
-namespace Models;
 
-public class Movie
-{   
-   
-    public Guid MovieId { get; set; }
+namespace backEnd.DTOs; 
+
+public class MovieDTOin {
+    
     public string Title { get; set; }
     public string Image {get; set;}
     public string Duration { get; set; }
     public string Date { get; set; }
     public string Director { get; set; }
     public string Actors { get; set; }
-    public Gender Gender {get; set;}
-    public float Qualification { get; set;}
-    [JsonIgnore]
-    public IEnumerable<UserMovie> UserMovies {get; set;}
-
+    public float Qualification {get; set;}
+    public GenderODT Gender {get; set;}
+    
 }
 
-public enum Gender 
+public enum GenderODT 
 {
     Accion,
     Aventura,

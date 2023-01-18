@@ -1,4 +1,5 @@
 using Models;
+using backEnd.DTOs;
 using backEnd.Services;  
 using Microsoft.AspNetCore.Mvc; 
 
@@ -15,16 +16,15 @@ public class MovieController: ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Movie> Get()
+    public async Task<IEnumerable<Movie>> Get()
     {
-        return _services.Get(); 
+        return await _services.Get(); 
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Movie> GetById(string id)
+    public async Task<ActionResult<Movie>> GetById(string id)
     {
-        
-        var movie = _services.GetById(id);
+        var movie = await _services.GetById(id);
 
         if(movie is null) return NotFound();
 
@@ -32,18 +32,25 @@ public class MovieController: ControllerBase
     }
 
     [HttpPost] 
-    public IActionResult Create(Movie movie)
+    public async Task<IActionResult> Create(MovieDTOin movie)
     {
 
-        var newMovie = _services.Create(movie); 
+        var newMovie = await _services.Create(movie); 
 
         return CreatedAtAction(nameof(GetById), new {id = newMovie.MovieId}, movie);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(string id, Movie movie) 
+    public async Task<IActionResult> Update(string id, MovieDTOin movie) 
     {
-        _services.Update(id, movie);
+        await _services.Update(id, movie);
+        return Ok(); 
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        await _services.Delete(id); 
         return Ok(); 
     }
 }

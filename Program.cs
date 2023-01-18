@@ -15,7 +15,6 @@ builder.Services.AddNpgsql<AplicationContext>(builder.Configuration.GetConnectio
 //Services 
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<MovieServices>();
-builder.Services.AddScoped<GenderServices>();
 //Services
 
 var app = builder.Build();

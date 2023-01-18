@@ -1,6 +1,8 @@
 using Models;
+using backEnd.DTOs; 
 using ContextAplication;
-// using System.Data.Entity; 
+using Microsoft.EntityFrameworkCore;
+
 namespace backEnd.Services; 
 
 public class MovieServices 
@@ -11,61 +13,73 @@ public class MovieServices
         _context = context; 
     }
 
-    public IEnumerable<Movie> Get(){
+    public async Task<IEnumerable<Movie>> Get(){
 
-        return _context.Movies; 
+        return await _context.Movies.ToListAsync(); 
     }
 
-    public Movie? GetById(string id) {
+    public async Task<Movie>? GetById(string id) {
 
         Guid idMovie = Guid.Parse(id); 
-        var movie = _context.Movies.Find(idMovie); 
+        var movie = await _context.Movies.FindAsync(idMovie); 
 
         return movie; 
     }
 
-    public Movie Create(Movie movie) {
-        
-        
-        _context.Movies.Add(movie);
-        _context.SaveChanges();
+    public async Task<Movie> Create(MovieDTOin movie) {
 
-        // var movieCreated = _context.Movies.Find(movie.MovieId); 
+        var newMovie = new Movie(); 
+        Gender value = (Gender)((int)(movie.Gender)); //Conversion 
 
-        _context.MovieGenders.Add(new MovieGender() {MovieId = movie.MovieId, GenderId = new Guid("77fec454-44ed-4d8e-99a9-a7f4b3682c59") }); 
-        _context.SaveChanges(); 
+        newMovie.Title = movie.Title;
+        newMovie.Image = movie.Image; 
+        newMovie.Duration = movie.Duration;
+        newMovie.Date = movie.Date; 
+        newMovie.Director = movie.Director;
+        newMovie.Actors = movie.Actors;
+        newMovie.Qualification = movie.Qualification;
+        newMovie.Gender = value; 
 
-        return movie; 
+        await _context.Movies.AddAsync(newMovie);
+        await _context.SaveChangesAsync();
+
+        return newMovie; 
     }
 
-    public void Update(string id, Movie movie) {
+    public async Task Update(string id, MovieDTOin movie) {
+       
         Guid idMovie = Guid.Parse(id); 
 
-        var movieUpdate = _context.Movies.Find(idMovie); 
+        var movieUpdate = await _context.Movies.FindAsync(idMovie); 
+
 
         if(movieUpdate is not null) {
+
+            Gender value = (Gender)((int)(movieUpdate.Gender));
+        
             movieUpdate.Title = movie.Title;
             movieUpdate.Image = movie.Image;
             movieUpdate.Duration = movie.Duration;
             movieUpdate.Date = movie.Date;
             movieUpdate.Director = movie.Director;
             movieUpdate.Actors = movie.Actors;
+            movieUpdate.Gender = value; 
             movieUpdate.Qualification = movie.Qualification;
 
-            _context.SaveChanges();
+             await _context.SaveChangesAsync();
         }
     }
 
-    public void Delete(string id){
+    public async Task Delete(string id){
 
         Guid idMovie = Guid.Parse(id); 
 
-        var movieDelete = _context.Users.Find(idMovie); 
+        var movieDelete = await _context.Users.FindAsync(idMovie); 
 
         if(movieDelete is not null) 
         {
-            _context.Users.Remove(movieDelete); 
-            _context.SaveChanges(); 
+             _context.Users.Remove(movieDelete); 
+            await _context.SaveChangesAsync(); 
         }
     }
 

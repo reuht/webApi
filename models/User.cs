@@ -11,7 +11,7 @@ public class User
     public Rol Roluser {get;set;}
     public string Identification { get; set; } = null!;
     public string Adress { get; set; } = null!;
-    public IEnumerable<UserMovie>? UserMovies {get; set;}
+    public IEnumerable<UserMovie> UserMovies {get; set;}
     
 }
 
