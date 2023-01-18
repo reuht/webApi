@@ -16,7 +16,7 @@ public class MovieController: ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Movie>> Get()
+    public async Task<IEnumerable<MovieDTOout>> Get()
     {
         return await _services.Get(); 
     }

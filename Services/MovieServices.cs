@@ -13,9 +13,17 @@ public class MovieServices
         _context = context; 
     }
 
-    public async Task<IEnumerable<Movie>> Get(){
+    public async Task<IEnumerable<MovieDTOout>> Get(){
 
-        return await _context.Movies.ToListAsync(); 
+        return await _context.Movies.Select(a => new MovieDTOout {
+
+            MovieId = a.MovieId,
+            Title = a.Title,
+            Image = a.Image,
+            Total = a.Stock.Total,
+            Rented = a.Stock.Rented
+         
+        }).ToListAsync(); 
     }
 
     public async Task<Movie>? GetById(string id) {
@@ -52,7 +60,7 @@ public class MovieServices
 
         await _context.Stocks.AddAsync(stock);
         await _context.SaveChangesAsync(); 
-        
+
         return newMovie; 
     }
 
@@ -60,23 +68,25 @@ public class MovieServices
        
         Guid idMovie = Guid.Parse(id); 
 
-        var movieUpdate = await _context.Movies.FindAsync(idMovie); 
+        var update = await _context.Movies.FindAsync(idMovie); 
 
 
-        if(movieUpdate is not null) {
+        if(update is not null) {
 
-            Gender value = (Gender)((int)(movieUpdate.Gender));
-        
-            movieUpdate.Title = movie.Title;
-            movieUpdate.Image = movie.Image;
-            movieUpdate.Duration = movie.Duration;
-            movieUpdate.Date = movie.Date;
-            movieUpdate.Director = movie.Director;
-            movieUpdate.Actors = movie.Actors;
-            movieUpdate.Gender = value; 
-            movieUpdate.Qualification = movie.Qualification;
+            Gender value = (Gender)((int) movie.Gender);
+            //crear nuevamente con el anterior id 
 
-             await _context.SaveChangesAsync();
+            update.MovieId = idMovie;
+            update.Title = movie.Title;
+            update.Image = movie.Image;
+            update.Duration = movie.Duration;
+            update.Date = movie.Date;
+            update.Director = movie.Director;
+            update.Actors = movie.Actors;
+            update.Gender = value; 
+            update.Qualification = movie.Qualification;
+
+            await _context.SaveChangesAsync();
         }
     }
 
@@ -84,11 +94,11 @@ public class MovieServices
 
         Guid idMovie = Guid.Parse(id); 
 
-        var movieDelete = await _context.Users.FindAsync(idMovie); 
+        var movieDelete = await _context.Movies.FindAsync(idMovie); 
 
         if(movieDelete is not null) 
         {
-             _context.Users.Remove(movieDelete); 
+             _context.Movies.Remove(movieDelete); 
             await _context.SaveChangesAsync(); 
         }
     }

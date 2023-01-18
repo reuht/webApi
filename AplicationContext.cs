@@ -45,9 +45,8 @@ public partial class AplicationContext : DbContext
             .WithMany(p => p.UserMovies)
             .HasForeignKey(pt => pt.MovieId);
         //-----------------------------------------
-        // modelBuilder.Entity<Stock>().HasKey(p => p.MovieId);
 
-        modelBuilder.Entity<Stock>().HasKey(p => p.MovieId);
+        modelBuilder.Entity<Stock>().HasKey(b => b.MovieId);
 
         modelBuilder.Entity<Movie>()
             .HasOne(b => b.Stock)
