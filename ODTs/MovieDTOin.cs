@@ -11,6 +11,7 @@ public class MovieDTOin {
     public string Actors { get; set; }
     public float Qualification {get; set;}
     public GenderODT Gender {get; set;}
+    public int Total {get; set;}
     
 }
 

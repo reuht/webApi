@@ -3,6 +3,7 @@ using System;
 using ContextAplication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backEnd.Migrations
 {
     [DbContext(typeof(AplicationContext))]
-    partial class AplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230118163036_NuevoModeloRelacionado")]
+    partial class NuevoModeloRelacionado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +28,6 @@ namespace backEnd.Migrations
             modelBuilder.Entity("Models.Movie", b =>
                 {
                     b.Property<Guid>("MovieId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Actors")
@@ -66,6 +68,7 @@ namespace backEnd.Migrations
             modelBuilder.Entity("Models.Stock", b =>
                 {
                     b.Property<Guid>("MovieId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int>("Left")
@@ -141,15 +144,15 @@ namespace backEnd.Migrations
                     b.ToTable("UserMovies");
                 });
 
-            modelBuilder.Entity("Models.Stock", b =>
+            modelBuilder.Entity("Models.Movie", b =>
                 {
-                    b.HasOne("Models.Movie", "Movie")
-                        .WithOne("Stock")
-                        .HasForeignKey("Models.Stock", "MovieId")
+                    b.HasOne("Models.Stock", "Stock")
+                        .WithOne("Movie")
+                        .HasForeignKey("Models.Movie", "MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Movie");
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("Models.UserMovie", b =>
@@ -173,10 +176,13 @@ namespace backEnd.Migrations
 
             modelBuilder.Entity("Models.Movie", b =>
                 {
-                    b.Navigation("Stock")
-                        .IsRequired();
-
                     b.Navigation("UserMovies");
+                });
+
+            modelBuilder.Entity("Models.Stock", b =>
+                {
+                    b.Navigation("Movie")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.User", b =>

@@ -1,6 +1,8 @@
 
 using Models;
+using backEnd.DTOs;
 using ContextAplication;
+using Microsoft.EntityFrameworkCore;
 
 namespace backEnd.Services; 
 
@@ -13,38 +15,48 @@ public class UserServices
     }
 
     
-    public IEnumerable<User>Get()
+    public async Task<IEnumerable<User>>Get()
     {
         
-        return _context.Users.ToList(); 
+        return await _context.Users.ToListAsync(); 
 
     } //=> _context.Users.ToList();
 
    
-    public User? GetById(string id)
+    public async Task<User>? GetById(string id)
     {
 
         Guid idUser = Guid.Parse(id); 
-        var user = _context.Users.Find(idUser);
+        var user = await _context.Users.FindAsync(idUser);
         
         return user; 
     }
 
 
-    public User Create(User user)
+    public async Task<User> Create(UserDTO user)
     {
-         _context.Users.Add(user);
-         _context.SaveChanges(); 
-        return user;  
+         var newUser = new User(); 
+         Rol value = (Rol)((int)(user.Roluser)); 
+
+         newUser.Name = user.Name; 
+         newUser.Email = user.Email;
+         newUser.Pass = user.Pass;
+         newUser.Identification = user.Identification;
+         newUser.Adress = user.Adress;
+         newUser.Roluser = value; 
+
+         await _context.Users.AddAsync(newUser);
+         await _context.SaveChangesAsync(); 
+        return newUser;  
     }
 
 
-    public void Update(string id, User user)
+    public async Task Update(string id, User user)
     {
 
         Guid idUser = Guid.Parse(id);
 
-        var userUpdate = _context.Users.Find(idUser); 
+        var userUpdate = await _context.Users.FindAsync(idUser); 
 
         if(userUpdate is not null) 
         {
@@ -53,12 +65,13 @@ public class UserServices
             userUpdate.Identification = user.Identification;
             userUpdate.Pass = user.Pass; 
             userUpdate.Adress = user.Adress;
-            _context.SaveChanges(); 
+            
+            await _context.SaveChangesAsync(); 
         }
     }
 
   
-    public void Delete(string id)
+    public async Task Delete(string id)
     {
 
         Guid idUser = Guid.Parse(id); 
@@ -68,7 +81,7 @@ public class UserServices
         if(userDelete is not null) 
         {
             _context.Users.Remove(userDelete); 
-            _context.SaveChanges(); 
+            await _context.SaveChangesAsync(); 
         }
     }
 }

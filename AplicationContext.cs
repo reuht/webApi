@@ -7,6 +7,7 @@ public partial class AplicationContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Movie> Movies { get; set; }
+    public DbSet<Stock> Stocks {get; set;}
     public DbSet<UserMovie> UserMovies { get; set; }
 
     public AplicationContext(DbContextOptions<AplicationContext> options) : base(options) { }
@@ -32,7 +33,7 @@ public partial class AplicationContext : DbContext
         });
 
         
-        //-------------------- Relations--UserMovie
+        //--------------Relations-----------------
         modelBuilder.Entity<UserMovie>().HasKey(t => new {t.UserId,t.MovieId});
         modelBuilder.Entity<UserMovie>()
             .HasOne(pt => pt.User)
@@ -44,7 +45,14 @@ public partial class AplicationContext : DbContext
             .WithMany(p => p.UserMovies)
             .HasForeignKey(pt => pt.MovieId);
         //-----------------------------------------
+        // modelBuilder.Entity<Stock>().HasKey(p => p.MovieId);
 
+        modelBuilder.Entity<Stock>().HasKey(p => p.MovieId);
+
+        modelBuilder.Entity<Movie>()
+            .HasOne(b => b.Stock)
+            .WithOne(a => a.Movie)
+            .HasForeignKey<Stock>(b => b.MovieId);
     }
 
 }

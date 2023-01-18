@@ -14,8 +14,9 @@ public class Movie
     public Gender Gender {get; set;}
     public float Qualification { get; set;}
     [JsonIgnore]
+    public Stock Stock {get; set;}
+    [JsonIgnore]
     public IEnumerable<UserMovie> UserMovies {get; set;}
-
 }
 
 public enum Gender 

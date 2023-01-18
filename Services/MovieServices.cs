@@ -29,8 +29,11 @@ public class MovieServices
     public async Task<Movie> Create(MovieDTOin movie) {
 
         var newMovie = new Movie(); 
+        var stock = new Stock(); 
+
         Gender value = (Gender)((int)(movie.Gender)); //Conversion 
 
+        newMovie.MovieId = Guid.NewGuid(); 
         newMovie.Title = movie.Title;
         newMovie.Image = movie.Image; 
         newMovie.Duration = movie.Duration;
@@ -39,10 +42,17 @@ public class MovieServices
         newMovie.Actors = movie.Actors;
         newMovie.Qualification = movie.Qualification;
         newMovie.Gender = value; 
-
+        
         await _context.Movies.AddAsync(newMovie);
         await _context.SaveChangesAsync();
 
+        //---Cargar Stock 
+        stock.MovieId = newMovie.MovieId;
+        stock.Total = movie.Total;
+
+        await _context.Stocks.AddAsync(stock);
+        await _context.SaveChangesAsync(); 
+        
         return newMovie; 
     }
 

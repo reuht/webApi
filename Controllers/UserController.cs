@@ -1,4 +1,5 @@
 using Models;
+using backEnd.DTOs;
 using backEnd.Services;  
 using Microsoft.AspNetCore.Mvc; 
 
@@ -15,15 +16,15 @@ public class UserController: ControllerBase
         _services = services; //inyeccion dependencias
     }
     [HttpGet] //atributo ---> tipo de peticion --> ruta: /
-    public IEnumerable<User>Get(){
+    public async Task<IEnumerable<User>>Get(){
 
-        return _services.Get(); 
+        return await _services.Get(); 
     } //=> _services.Users.ToList();
 
     [HttpGet("{id}")] //atributo ---> tipo de peticion /:id
-    public ActionResult<User>GetById(string id){
+    public async Task<ActionResult<User>>GetById(string id){
 
-        var user = _services.GetById(id);
+        var user = await _services.GetById(id);
 
         if(user is null) return NotFound();
 
@@ -32,23 +33,24 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(User user){
-        var newUser = _services.Create(user); 
+    public async Task<IActionResult> Create(UserDTO user){
+
+        var newUser = await _services.Create(user); 
 
         return CreatedAtAction(nameof(GetById), new {id = newUser.UserId}, newUser); 
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(string id, User user)
+    public async Task<IActionResult> Update(string id, User user)
     {
-        _services.Update(id, user); 
+        await _services.Update(id, user); 
         return Ok(); 
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(string id)
+    public async Task<IActionResult> Delete(string id)
     {
-        _services.Delete(id); 
+        await _services.Delete(id); 
         return Ok();
     }
 
