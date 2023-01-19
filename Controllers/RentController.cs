@@ -15,7 +15,7 @@ public class RentsController: ControllerBase {
     }
 
     [HttpPost("Booking")]
-    public async Task<ActionResult>CreateBooking(BookingDTO booking)
+    public async Task<ActionResult>CreateBooking(ProcedureDTO booking)
     {
 
         bool iscreteBooking = await _services.CreateBooking(booking);
@@ -24,10 +24,11 @@ public class RentsController: ControllerBase {
     }
 
     [HttpPost("Rented")]
-    public async Task<ActionResult>CreateRented()
+    public async Task<ActionResult>CreateRented(ProcedureDTO rent)
     {
+        var result = await _services.CreateRent(rent);
         
-        return Ok(); 
+        return result ? Ok() : BadRequest(); 
     }
 
 

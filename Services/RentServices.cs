@@ -2,6 +2,7 @@
 using Models;
 using backEnd.DTOs;
 using ContextAplication;
+using Microsoft.EntityFrameworkCore;
 
 namespace backEnd.Services;
 
@@ -13,7 +14,7 @@ public class RentServices
         _context = context;
     }
 
-    public async Task<bool> CreateBooking(BookingDTO booking) 
+    public async Task<bool> CreateBooking(ProcedureDTO booking) 
     {
 
         Guid idMovie = Guid.Parse(booking.idMovie);
@@ -54,5 +55,27 @@ public class RentServices
 
 
 
-    
+    public async Task<bool> CreateRent(ProcedureDTO rent) 
+    {
+        Guid idUser = Guid.Parse(rent.idUser); 
+        Guid idMovie = Guid.Parse(rent.idMovie);
+
+        var record = await _context.UserMovies.FindAsync(idUser, idMovie);
+        var stock = await _context.Stocks.FindAsync(idMovie); 
+
+        if(record is not null && stock is not null){
+
+            record.DataRent = DateTime.UtcNow; 
+            //rent
+            stock.Rented++;
+            stock.Reserved--; 
+            
+            await _context.SaveChangesAsync(); 
+
+            return true; 
+
+        }
+
+        return false;
+    }
 }
