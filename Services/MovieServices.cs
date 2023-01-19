@@ -80,6 +80,7 @@ public class MovieServices
             //---Cargar Stock 
             stock.MovieId = newMovie.MovieId;
             stock.Total = movie.Total;
+            stock.Left = movie.Total;
 
             await _context.Stocks.AddAsync(stock);
             await _context.SaveChangesAsync();

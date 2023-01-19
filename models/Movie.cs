@@ -11,6 +11,7 @@ public class Movie
     public string Date { get; set; }
     public string Director { get; set; }
     public string Actors { get; set; }
+    public bool SoldOut {get; set;}
     public Gender Gender {get; set;}
     public float Qualification { get; set;}
     [JsonIgnore]
