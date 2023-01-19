@@ -94,6 +94,8 @@ public class RentServices
             stock.Rented--;
             stock.Left++;
 
+            _context.UserMovies.Remove(record); //liminar registro 
+            
             _context.SaveChanges();
             return true; 
 
