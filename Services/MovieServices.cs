@@ -26,6 +26,7 @@ public class MovieServices
                 Image = a.Image,
                 Total = a.Stock.Total,
                 Left = a.Stock.Left,
+                Reserved = a.Stock.Reserved,
                 Rented = a.Stock.Rented,
 
             }).ToListAsync();
