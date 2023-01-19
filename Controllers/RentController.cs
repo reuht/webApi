@@ -31,6 +31,16 @@ public class RentsController: ControllerBase {
         return result ? Ok() : BadRequest(); 
     }
 
+    [HttpPost("Delivery")]
+    public async Task<ActionResult>CreateDelivery(ProcedureDTO delivery){
+
+        bool result = await _services.CreateDelivey(delivery); 
+
+        return result ? Ok(new {msg = "Entrega realizada"}) : BadRequest();
+    }
+
+
+
 
 
 }

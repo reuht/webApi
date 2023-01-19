@@ -1,3 +1,4 @@
+using System;
 // using System;
 using Models;
 using backEnd.DTOs;
@@ -77,5 +78,26 @@ public class RentServices
         }
 
         return false;
+    }
+
+    public async Task<bool> CreateDelivey(ProcedureDTO delivery){
+
+        Guid idUser = Guid.Parse(delivery.idUser); 
+        Guid idMovie = Guid.Parse(delivery.idMovie); 
+
+        var record = await _context.UserMovies.FindAsync(idUser, idMovie);
+        var stock = await _context.Stocks.FindAsync(idMovie); 
+
+        if(record is not null && stock is not null){
+
+            record.Delivery = DateTime.UtcNow; //fecha de entrega 
+            stock.Rented--;
+            stock.Left++;
+
+            _context.SaveChanges();
+            return true; 
+
+        }
+        return false; 
     }
 }
