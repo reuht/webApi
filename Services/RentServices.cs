@@ -1,9 +1,7 @@
-using System;
-// using System;
 using Models;
 using backEnd.DTOs;
 using ContextAplication;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace backEnd.Services;
 
@@ -18,6 +16,7 @@ public class RentServices
     public async Task<bool> CreateBooking(ProcedureDTO booking) 
     {
 
+        //validad primero si se ha hecho antes reserva porque no se puede duplicar la llave 
         Guid idMovie = Guid.Parse(booking.idMovie);
         Guid idUser = Guid.Parse(booking.idUser);  
 
@@ -88,7 +87,8 @@ public class RentServices
         var record = await _context.UserMovies.FindAsync(idUser, idMovie);
         var stock = await _context.Stocks.FindAsync(idMovie); 
 
-        if(record is not null && stock is not null){
+        if(record is not null && stock is not null){  
+            //validar que se haya hecho reserva 
 
             record.Delivery = DateTime.UtcNow; //fecha de entrega 
             stock.Rented--;
