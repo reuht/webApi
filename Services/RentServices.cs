@@ -29,7 +29,7 @@ public class RentServices
         {
 
             int date1 = record.Delivery.Day;
-            int date2 = DateTime.UtcNow.Day;
+            int date2 = record.Booking.Day;
 
             if (stock.Left == 1)
             {
@@ -37,7 +37,7 @@ public class RentServices
                 await _context.AddRangeAsync();
             }
 
-            if (date1 - date2 > 3)
+            if (date1 - date2 > 0)
             {
 
                 record.Booking = DateTime.UtcNow;
