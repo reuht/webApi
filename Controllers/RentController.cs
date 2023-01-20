@@ -28,7 +28,7 @@ public class RentsController: ControllerBase {
     {
         var result = await _services.CreateRent(rent);
         
-        return result ? Ok() : BadRequest(); 
+        return Ok(new{msg = result}); 
     }
 
     [HttpPost("Delivery")]
