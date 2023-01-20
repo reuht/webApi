@@ -20,7 +20,7 @@ public class RentsController: ControllerBase {
 
         bool iscreteBooking = await _services.CreateBooking(booking);
         
-        return iscreteBooking ? Ok(new {msg = "Se a reservado la pelicula"}) : BadRequest(new {msg = "Pelicula agotada" }); 
+        return iscreteBooking ? Ok(new {msg = "Se a reservado la pelicula"}) : BadRequest(); 
     }
 
     [HttpPost("Rented")]
