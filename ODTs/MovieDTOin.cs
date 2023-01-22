@@ -10,6 +10,7 @@ public class MovieDTOin {
     public string Director { get; set; }
     public string Actors { get; set; }
     public float Qualification {get; set;}
+    public decimal Rental_price{get; set;}
     public GenderODT Gender {get; set;}
     public int Total {get; set;}
     

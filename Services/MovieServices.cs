@@ -29,6 +29,7 @@ public class MovieServices
                 Reserved = a.Stock.Reserved,
                 Rented = a.Stock.Rented,
 
+
             }).ToListAsync();
         }
         catch (Exception ex)
@@ -74,6 +75,7 @@ public class MovieServices
             newMovie.Actors = movie.Actors;
             newMovie.Qualification = movie.Qualification;
             newMovie.Gender = value;
+            newMovie.Rental_price = movie.Rental_price;
 
             await _context.Movies.AddAsync(newMovie);
             await _context.SaveChangesAsync();
@@ -120,6 +122,7 @@ public class MovieServices
                 update.Actors = movie.Actors;
                 update.Gender = value;
                 update.Qualification = movie.Qualification;
+                update.Rental_price = movie.Rental_price;
 
                 await _context.SaveChangesAsync();
             }

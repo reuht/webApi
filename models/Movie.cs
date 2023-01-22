@@ -14,6 +14,7 @@ public class Movie
     public bool SoldOut {get; set;}
     public Gender Gender {get; set;}
     public float Qualification { get; set;}
+    public decimal Rental_price {get; set;}
     [JsonIgnore]
     public Stock Stock {get; set;}
     [JsonIgnore]

@@ -3,6 +3,8 @@ using System.Data;
 using Models;
 using backEnd.DTOs;
 using ContextAplication;
+using System.Linq;
+
 // using Microsoft.IdentityModel.Tokens;
 
 namespace backEnd.Services;
@@ -15,167 +17,152 @@ public class RentServices
         _context = context;
     }
 
-    public async Task<bool> CreateBooking(ProcedureDTO booking)
-    {
-        try
-        {
+    public async Task<bool>CreateBooking(ProcedureDTO rent){
 
-            Guid idMovie = Guid.Parse(booking.idMovie);
-            Guid idUser = Guid.Parse(booking.idUser);
+        Guid idMovie = Guid.Parse(rent.idMovie);
+        Guid idUser = Guid.Parse(rent.idUser);
 
-            var stock = await _context.Stocks.FindAsync(idMovie);
-            var movie = await _context.Movies.FindAsync(idMovie);
+        UserMovie register = new UserMovie(); // 
+        var stock = await _context.Stocks.FindAsync(idMovie);
 
-            var record = await _context.UserMovies.FindAsync(idUser, idMovie);
+        //busqueda usando LINQ
+        var query = from r in _context.UserMovies where r.UserId == idUser && r.MovieId == idMovie select r;
+        var registers = query.FirstOrDefault<UserMovie>();
+        
+        
 
-            if (stock.Left > 0)
-            {
+        if(stock.Left > 0){
 
-                if (stock.Left == 1)
-                {
+            if(registers is null) {
+
+                if(stock.Left < rent.Movies_total){
+                    return false;
+                }
+
+                if(stock.Left == rent.Movies_total){
+                    var movie = await _context.Movies.FindAsync(idMovie);
                     movie.SoldOut = true;
-                    await _context.AddRangeAsync();
-                }
-
-                if (record is null)
-                {
-
-                    var register = new UserMovie();
-
-                    register.UserId = idUser;
-                    register.MovieId = idMovie;
-                    register.Booking = DateTime.UtcNow;
-
-                    stock.Left--;
-                    stock.Reserved++;
-
-                    await _context.AddAsync(register);
                     await _context.SaveChangesAsync();
-
-                    return true;
                 }
 
-                if (record is not null &&  record.Delivery.Hour - record.DataRent.Hour > 0 )
-                {
+                register.Booking = DateTime.UtcNow;
+                register.MovieId = idMovie;
+                register.UserId = idUser;
+                register.Movies_total = rent.Movies_total;
 
-                    record.Booking = DateTime.UtcNow;
+                stock.Left -= rent.Movies_total; 
+                stock.Reserved += rent.Movies_total;
 
-                    stock.Left--;
-                    stock.Reserved++;
-                    await _context.SaveChangesAsync();
-
-                    return true;
-                }
-
-                return false;
-            }
-
-
-            return false;
-
-
-        }
-        catch (Exception ex)
-        {
-
-            return false;
-
-        }
-
-
-    }
-
-
-
-    public async Task<bool> CreateRent(ProcedureDTO rent)
-    {
-        try
-        {
-
-            Guid idUser = Guid.Parse(rent.idUser);
-            Guid idMovie = Guid.Parse(rent.idMovie);
-
-            var record = await _context.UserMovies.FindAsync(idUser, idMovie);
-            var stock = await _context.Stocks.FindAsync(idMovie);
-
-            if (record.DataRent.Day == 1 && record.Booking.Day > 1)
-            {
-
-                record.DataRent = DateTime.UtcNow;
-                stock.Rented++;
-                stock.Reserved--;
+                await _context.UserMovies.AddAsync(register);
                 await _context.SaveChangesAsync();
 
-                return true;
+                return true; 
+
             }
 
-            if (record.DataRent.Day != 1 && record.Delivery.Hour - record.DataRent.Hour > 0)
+            if(registers.DataRent is null && registers.Delivery is not null)
             {
 
-                record.DataRent = DateTime.UtcNow;
-                stock.Rented++;
-                stock.Reserved--;
+                 if(stock.Left < rent.Movies_total){
+                    return false;
+                }
+
+                if(stock.Left == rent.Movies_total){
+                    var movie = await _context.Movies.FindAsync(idMovie);
+                    movie.SoldOut = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                registers.Booking = DateTime.UtcNow;
+                registers.DataRent = null;
+                registers.Delivery = null;
+                registers.Movies_total = rent.Movies_total;
+
+                stock.Left -= rent.Movies_total; 
+                stock.Reserved += rent.Movies_total;
+
+               
                 await _context.SaveChangesAsync();
 
-                return true;
+                return true; 
+
 
             }
 
-            return false;
+            return false; 
 
         }
-        catch (Exception ex)
-        {
-            return false;
-        }
+
+
+        return false; 
     }
 
 
-    public async Task<bool> CreateDelivey(ProcedureDTO delivery)
-    {
-        try
-        {
-            Guid idUser = Guid.Parse(delivery.idUser);
-            Guid idMovie = Guid.Parse(delivery.idMovie);
+    public async Task<bool>CreateRent(ProcedureDTO rent){
 
-            var record = await _context.UserMovies.FindAsync(idUser, idMovie);
-            var stock = await _context.Stocks.FindAsync(idMovie);
+        Guid idMovie = Guid.Parse(rent.idMovie);
+        Guid idUser = Guid.Parse(rent.idUser);
 
+        var stock = await _context.Stocks.FindAsync(idMovie);
 
-            if (record.DataRent.Day != 1 && record.Delivery.Day == 1)
-            {
-                record.Delivery = DateTime.UtcNow; //fecha de entrega 
-                stock.Rented--;
-                stock.Left++;
+        //busqueda usando LINQ
+        var query = from r in _context.UserMovies where r.UserId == idUser && r.MovieId == idMovie select r;
+        var registers = query.FirstOrDefault<UserMovie>();
 
+        if(registers is not null && registers.Booking is not null && registers.DataRent is null){
 
-                _context.SaveChanges();
-                return true;
+            var movie = await _context.Movies.FindAsync(idMovie);
+            decimal price = movie.Rental_price; 
+            registers.DataRent = DateTime.UtcNow;
+            registers.Rental_value = price * registers.Movies_total;
 
-            }
+            stock.Reserved -= registers.Movies_total; 
+            stock.Rented+= registers.Movies_total; 
 
-            if (record.Delivery.Day != 1 && record.Delivery.Day - DateTime.UtcNow.Day < 0)
-            {
+            await _context.SaveChangesAsync();
 
-                record.Delivery = DateTime.UtcNow; //fecha de entrega nueva
-                stock.Rented--;
-                stock.Left++;
-
-                _context.SaveChanges();
-                return true;
-
-            }
-
-            return false;
-
-
+            return true;
         }
-        catch (Exception ex)
-        {
-            return false;
-        }
-
-
+        return false; 
     }
+
+
+     public async Task<bool>CreateDelivery(ProcedureDTO rent){
+
+        Guid idMovie = Guid.Parse(rent.idMovie);
+        Guid idUser = Guid.Parse(rent.idUser);
+
+        var stock = await _context.Stocks.FindAsync(idMovie);
+        var movie = await _context.Movies.FindAsync(idMovie);
+   
+        //busqueda usando LINQ
+        var query = from r in _context.UserMovies where r.UserId == idUser && r.MovieId == idMovie select r;
+        var registers = query.FirstOrDefault<UserMovie>();
+
+        if(registers is not null && registers.DataRent is not null && registers.Delivery is null){
+
+            if(stock.Left == 0){
+
+                movie.SoldOut = false;
+                await _context.SaveChangesAsync();
+
+            }
+
+            decimal price = movie.Rental_price; 
+            registers.Delivery = DateTime.UtcNow;
+            registers.Booking = null;
+            registers.DataRent = null; 
+            registers.Rental_value = price * registers.Movies_total;
+
+            stock.Rented -= registers.Movies_total; 
+            stock.Left+= registers.Movies_total; 
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        return false; 
+    }
+    
 
 }

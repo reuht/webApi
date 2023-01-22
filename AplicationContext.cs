@@ -34,9 +34,15 @@ public partial class AplicationContext : DbContext
             movie.HasKey(p => p.MovieId);
         });
 
+        modelBuilder.Entity<UserMovie>(p => {
+            p.Property(s => s.UserMovieId).ValueGeneratedOnAdd();
+            p.Property(s => s.Booking).IsRequired(false);
+            p.Property(s => s.DataRent).IsRequired(false);
+            p.Property(s => s.Delivery).IsRequired(false);
+        });
         
         //--------------Relations-----------------
-        modelBuilder.Entity<UserMovie>().HasKey(t => new {t.UserId,t.MovieId});
+        modelBuilder.Entity<UserMovie>().HasKey(t => t.UserMovieId);
         modelBuilder.Entity<UserMovie>()
             .HasOne(pt => pt.User)
             .WithMany(p => p.UserMovies)
