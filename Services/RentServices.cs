@@ -26,14 +26,13 @@ public class RentServices
         var stock = await _context.Stocks.FindAsync(idMovie);
 
         //busqueda usando LINQ
-        var query = from r in _context.UserMovies where r.UserId == idUser && r.MovieId == idMovie select r;
+        var query = from r in _context.UserMovies where r.UserId == idUser && r.MovieId == idMovie && r.Booking != null && r.DataRent == null && r.Delivery == null select r;
         var registers = query.FirstOrDefault<UserMovie>();
         
-        
-
+    
         if(stock.Left > 0){
 
-            if(registers is null) {
+            if(registers is null){
 
                 if(stock.Left < rent.Movies_total){
                     return false;
@@ -60,35 +59,6 @@ public class RentServices
 
             }
 
-            if(registers.DataRent is null && registers.Delivery is not null)
-            {
-
-                 if(stock.Left < rent.Movies_total){
-                    return false;
-                }
-
-                if(stock.Left == rent.Movies_total){
-                    var movie = await _context.Movies.FindAsync(idMovie);
-                    movie.SoldOut = true;
-                    await _context.SaveChangesAsync();
-                }
-
-                registers.Booking = DateTime.UtcNow;
-                registers.DataRent = null;
-                registers.Delivery = null;
-                registers.Movies_total = rent.Movies_total;
-
-                stock.Left -= rent.Movies_total; 
-                stock.Reserved += rent.Movies_total;
-
-               
-                await _context.SaveChangesAsync();
-
-                return true; 
-
-
-            }
-
             return false; 
 
         }
@@ -106,10 +76,13 @@ public class RentServices
         var stock = await _context.Stocks.FindAsync(idMovie);
 
         //busqueda usando LINQ
-        var query = from r in _context.UserMovies where r.UserId == idUser && r.MovieId == idMovie select r;
-        var registers = query.FirstOrDefault<UserMovie>();
+        var query = from r in _context.UserMovies 
+        where r.UserId == idUser && r.MovieId == idMovie && r.Booking != null && r.DataRent == null && r.Delivery == null select r;
 
-        if(registers is not null && registers.Booking is not null && registers.DataRent is null){
+        var registers = query.FirstOrDefault<UserMovie>();
+        // registers is not null && registers.Booking is not null && registers.DataRent is null
+
+        if(registers is not null){
 
             var movie = await _context.Movies.FindAsync(idMovie);
             decimal price = movie.Rental_price; 
@@ -136,10 +109,13 @@ public class RentServices
         var movie = await _context.Movies.FindAsync(idMovie);
    
         //busqueda usando LINQ
-        var query = from r in _context.UserMovies where r.UserId == idUser && r.MovieId == idMovie select r;
+        var query = from r in _context.UserMovies 
+        where r.UserId == idUser && r.MovieId == idMovie && r.Booking != null && r.DataRent != null && r.Delivery == null select r;
         var registers = query.FirstOrDefault<UserMovie>();
 
-        if(registers is not null && registers.DataRent is not null && registers.Delivery is null){
+        // registers is not null && registers.DataRent is not null && registers.Delivery is null
+
+        if(registers is not null){
 
             if(stock.Left == 0){
 
@@ -150,8 +126,8 @@ public class RentServices
 
             decimal price = movie.Rental_price; 
             registers.Delivery = DateTime.UtcNow;
-            registers.Booking = null;
-            registers.DataRent = null; 
+            // registers.Booking = null;
+            // registers.DataRent = null; 
             registers.Rental_value = price * registers.Movies_total;
 
             stock.Rented -= registers.Movies_total; 
