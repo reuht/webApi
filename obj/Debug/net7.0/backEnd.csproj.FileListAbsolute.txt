@@ -156,3 +156,5 @@ C:\Users\jhoth\OneDrive\Desktop\webApi\obj\Debug\net7.0\refint\backEnd.dll
 C:\Users\jhoth\OneDrive\Desktop\webApi\obj\Debug\net7.0\backEnd.pdb
 C:\Users\jhoth\OneDrive\Desktop\webApi\obj\Debug\net7.0\backEnd.genruntimeconfig.cache
 C:\Users\jhoth\OneDrive\Desktop\webApi\obj\Debug\net7.0\ref\backEnd.dll
+C:\Users\jhoth\OneDrive\Desktop\webApi\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\jhoth\OneDrive\Desktop\webApi\bin\Debug\net7.0\Newtonsoft.Json.dll
