@@ -160,3 +160,6 @@ C:\Users\jhoth\OneDrive\Desktop\webApi\bin\Debug\net7.0\Microsoft.AspNetCore.Aut
 C:\Users\jhoth\OneDrive\Desktop\webApi\bin\Debug\net7.0\Newtonsoft.Json.dll
 C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\DocumentFormat.OpenXml.dll
+C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\SpreadsheetLight.dll
+C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\System.IO.Packaging.dll

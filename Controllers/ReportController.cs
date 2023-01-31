@@ -18,11 +18,9 @@ public class ReportController: ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetInfo(){
-
-        SLDocument info = await _services.GetExcelInfo();
+    public async Task<FileResult> GetInfo(){
+        MemoryStream Report = await _services.GetExcelInfo();
         
-        return File(info,);
+       return File(Report, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
     }
-
 }

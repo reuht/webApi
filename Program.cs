@@ -20,6 +20,7 @@ builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<MovieServices>();
 builder.Services.AddScoped<RentServices>();
 builder.Services.AddScoped<LoginServices>();
+builder.Services.AddScoped<GenerateInfo>();
 //Services
 
 //jwt
