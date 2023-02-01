@@ -31,7 +31,7 @@ public class GenerateInfo {
             }).ToListAsync(); 
 
             SLDocument firtSheetUser = new SLDocument(); 
-            
+            DataTable FirstTableUser = new DataTable();
 
             //Titles columns 
             FirstTableUser.Columns.Add("UserId", typeof(string));
