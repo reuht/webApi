@@ -17,7 +17,7 @@ public class GenerateInfo {
         _context = context; 
     }
 
-    public async Task<MemoryStream> GetExcelInfo(){
+    public async Task<SLDocument> GetExcelInfo(){
         try {
 
             var informeUsers = await _context.Users.Select(p => new InformeDTO {
@@ -31,7 +31,7 @@ public class GenerateInfo {
             }).ToListAsync(); 
 
             SLDocument firtSheetUser = new SLDocument(); 
-            DataTable FirstTableUser = new DataTable();
+            
 
             //Titles columns 
             FirstTableUser.Columns.Add("UserId", typeof(string));
@@ -44,11 +44,10 @@ public class GenerateInfo {
                 FirstTableUser.Rows.Add(user.UserId.ToString(), user.Name, user.Email, user.Identification, user.Adress);
             }
             
-            MemoryStream document = new MemoryStream();
+          
             firtSheetUser.ImportDataTable(1, 1, FirstTableUser, true);
-            firtSheetUser.SaveAs(document);
-            // document.Position = 0; 
-            return document; 
+            
+            return firtSheetUser;
 
         }catch(Exception ex){
             return null;

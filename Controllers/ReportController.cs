@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Net;
 using Models;
 using backEnd.DTOs;
@@ -18,9 +19,9 @@ public class ReportController: ControllerBase
     }
 
     [HttpGet]
-    public async Task<FileResult> GetInfo(){
-        MemoryStream Report = await _services.GetExcelInfo();
+    public async Task GetInfo(){
+        SLDocument Report = await _services.GetExcelInfo();
         
-       return File(Report, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
+       return Response.End();
     }
 }
