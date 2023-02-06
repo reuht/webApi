@@ -27,6 +27,5 @@ public class ReportController: ControllerBase
 
         return File(content.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "informe.xlsx");
         
-       
     }
 }

@@ -8,6 +8,7 @@ public class UserDTO {
     public RolDTO Roluser {get;set;}
     public string Identification { get; set; } = null!;
     public string Adress { get; set; } = null!;
+    
 }
 
 public enum RolDTO {
