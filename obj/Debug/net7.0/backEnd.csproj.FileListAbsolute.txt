@@ -163,3 +163,6 @@ C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\Newtonsoft.Js
 C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\DocumentFormat.OpenXml.dll
 C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\SpreadsheetLight.dll
 C:\Users\jerso\OneDrive\Escritorio\JOSEPH\backEnd\bin\Debug\net7.0\System.IO.Packaging.dll
+C:\Users\jhoth\OneDrive\Desktop\webApi\bin\Debug\net7.0\DocumentFormat.OpenXml.dll
+C:\Users\jhoth\OneDrive\Desktop\webApi\bin\Debug\net7.0\SpreadsheetLight.dll
+C:\Users\jhoth\OneDrive\Desktop\webApi\bin\Debug\net7.0\System.IO.Packaging.dll

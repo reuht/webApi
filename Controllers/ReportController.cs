@@ -19,15 +19,14 @@ public class ReportController: ControllerBase
         _services = services; 
     }
 
-    [HttpGet]
-    public async Task GetInfo(){
-        SLDocument Report = await _services.GetExcelInfo();
+    [HttpGet] 
+    public async Task<IActionResult> GetInfo(){
 
-        Response.Clear();
-        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        // Response.AddHeader("Content-Disposition", "attachment; filename=WebStreamDownload.xlsx");
-    //     Report.SaveAs(Response.OutputStream);
-    //    return HttpResponse
-    return ;
+        
+        var content = await _services.GetExcelInfo();
+
+        return File(content.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "informe.xlsx");
+        
+       
     }
 }

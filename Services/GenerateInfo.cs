@@ -17,7 +17,7 @@ public class GenerateInfo {
         _context = context; 
     }
 
-    public async Task<SLDocument> GetExcelInfo(){
+    public async Task<MemoryStream> GetExcelInfo(){
         try {
 
             var informeUsers = await _context.Users.Select(p => new InformeDTO {
@@ -33,6 +33,10 @@ public class GenerateInfo {
             SLDocument firtSheetUser = new SLDocument(); 
             DataTable FirstTableUser = new DataTable();
 
+            
+            //
+            
+
             //Titles columns 
             FirstTableUser.Columns.Add("UserId", typeof(string));
             FirstTableUser.Columns.Add("Name", typeof(string));
@@ -46,8 +50,16 @@ public class GenerateInfo {
             
           
             firtSheetUser.ImportDataTable(1, 1, FirstTableUser, true);
+       
+
             
-            return firtSheetUser;
+            var data = new MemoryStream();
+            firtSheetUser.SaveAs(data); 
+
+            
+           // byte [] document = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "Informe.xlsx");
+
+           return data;
 
         }catch(Exception ex){
             return null;
@@ -56,10 +68,3 @@ public class GenerateInfo {
 }
 
 
-//  Guid nameComplement = new Guid();
-//         SLDocument file = await _services.GetExcelInfo();
-//          // convertir sldocument to byte
-//         file.SaveAs(document); // convertir sldocument to byte
-
-//         string fileName = "report-"+nameComplement.ToString()+".xlsx"; 
-//         return File(document, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
